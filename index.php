@@ -20,6 +20,7 @@ function whatIsHappening() {
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
 }
+//whatIsHappening();
 
 // TODO: provide some products (you may overwrite the example)
 $products = [
@@ -42,6 +43,9 @@ function validate()
 function handleForm()
 {
     // TODO: form related tasks (step 1)
+   echo "Thank you for your order: " . "We will soon ship to your address: ". $_POST["street"]
+       . " " . $_POST["streetnumber"] . " in " .  $_POST["zipcode"] . " " . $_POST["city"] . ".";
+
 
     // Validation (step 2)
     $invalidFields = validate();
@@ -53,9 +57,12 @@ function handleForm()
 }
 
 // TODO: replace this if by an actual check
-$formSubmitted = false;
+if (isset($_POST["submit"])) {
+handleForm();
+}
+/*$formSubmitted = false;
 if ($formSubmitted) {
     handleForm();
-}
+}*/
 
 require 'form-view.php';

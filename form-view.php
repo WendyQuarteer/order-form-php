@@ -14,7 +14,7 @@
 <body>
 <div class="container">
     <h1>The Hairy-Fish-Store: Everything to take care of your hairy fish</h1>
-    <h2>Place your order</h2>
+    <h2>Place your order:</h2>
     <?php // Navigation for when you need it ?>
     <?php /*
     <nav>
@@ -28,7 +28,7 @@
         </ul>
     </nav>
     */ ?>
-    <form method="post">
+    <form action ="index.php" method="post" >
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
@@ -72,10 +72,10 @@
             <?php endforeach; ?>
         </fieldset>
 
-        <button type="submit" class="btn btn-primary">Order!</button>
+        <button type="submit" name="submit" class="btn btn-primary">Order!</button>
     </form>
 
-    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
+    <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in The Hairy-Fish-Store.</footer>
 </div>
 
 <style>
