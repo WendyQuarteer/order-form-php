@@ -33,17 +33,22 @@ $products = [
     ['name' => 'fish-wax', 'price' => 8.25],
     ['name' => 'fish-fake-pony-tail', 'price' => 21.15]
 ];
-//get products:
+//get selected products:
 function selected($products)
 {
     if (isset($_POST['products'])) {
+        $totalPrice = 0;
         foreach ($_POST['products'] as $product) {
-            echo implode(": ", $products[$product]) . "<br>";
+            $selection = implode(": ", $products[$product]);
+            print_r( $selection . "€<br>");
+            $price = $products[$product]['price'];
+            $totalPrice += $price;
         }
+        return $totalPrice;
     }
 }
 
-$totalValue = 0;
+$totalValue = selected($products);
 
 function validate()
 {
@@ -75,7 +80,6 @@ function handleForm()
 // TODO: replace this if by an actual check
 if (isset($_POST["submit"])) {
     handleForm();
-    selected($products);
 }
 
 require 'form-view.php';
