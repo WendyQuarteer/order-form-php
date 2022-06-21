@@ -28,11 +28,13 @@
         </ul>
     </nav>
     */ ?>
-    <form action ="index.php" method="post" >
+    <form action ="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="email">E-mail:</label>
-                <input type="email" id="email" name="email" class="form-control"/>
+                <input type="email" id="email" name="email" class="form-control" value = "<?php if (isset($_REQUEST['email'])) echo $_REQUEST['email']?>"/>
+                <?php echo $emailErr ?>
+
             </div>
             <div></div>
         </div>
@@ -43,21 +45,25 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="street">Street:</label>
-                    <input type="text" name="street" id="street" class="form-control">
+                    <input type="text" name="street" id="street" class="form-control" value = "<?php if (isset($_REQUEST['street'])) echo $_REQUEST['street']?>">
+                    <?php echo $streetErr ?>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="streetnumber">Street number:</label>
-                    <input type="text" id="streetnumber" name="streetnumber" class="form-control">
+                    <input type="text" id="streetnumber" name="streetnumber" class="form-control" value = "<?php if (isset($_REQUEST['streetnumber'])) echo $_REQUEST['streetnumber']?>">
+                     <?php echo $streetNrErr ?>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="city">City:</label>
-                    <input type="text" id="city" name="city" class="form-control">
+                    <input type="text" id="city" name="city" class="form-control" value = "<?php if (isset($_REQUEST['city'])) echo $_REQUEST['city']?>">
+                    <?php echo $cityErr ?>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="zipcode">Zipcode</label>
-                    <input type="text" id="zipcode" name="zipcode" class="form-control">
+                    <input type="text" id="zipcode" name="zipcode" class="form-control" value = "<?php if (isset($_REQUEST['zipcode'])) echo $_REQUEST['zipcode']?>">
+                    <?php echo $zipcodeErr ?>
                 </div>
             </div>
         </fieldset>

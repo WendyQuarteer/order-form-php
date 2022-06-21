@@ -40,46 +40,99 @@ function selected($products)
         $totalPrice = 0;
         foreach ($_POST['products'] as $product) {
             $selection = implode(": ", $products[$product]);
-            print_r( $selection . "€<br>");
+            echo $selection . "€<br>";
             $price = $products[$product]['price'];
             $totalPrice += $price;
         }
+        echo "Total: " . $totalPrice . "€<br>";
         return $totalPrice;
     }
 }
-
 $totalValue = selected($products);
+
+$streetNrErr = ""; $zipcodeErr = ""; $streetErr = ""; $cityErr = ""; $emailErr = "";
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    return htmlspecialchars($data);
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $streetNumber = test_input($_POST["streetnumber"]);
+    if (!is_numeric($streetNumber)) {
+        $streetNrErr = "Streetnumber must be a number!";
+        //var_dump($streetNrErr);
+    }
+    if (empty($streetNumber)) {
+        $streetNrErr = "Streetnumber is required!";
+    }
+
+    $zipcode = test_input($_POST["zipcode"]);
+    if (!is_numeric($zipcode)) {
+        $zipcodeErr = "Zipcode must be a number!";
+        //var_dump($zipcode);
+    }
+    if (empty($zipcode)) {
+        $zipcodeErr = "Zipcode is required!";
+    }
+
+    $street = test_input($_POST["street"]);
+    if (!ctype_alpha($street)) {
+        $streetErr = " Street must be alphabetic!";
+    }
+    if(empty($street)) {
+        $streetErr = "Street is required!";
+    }
+
+    $city = test_input($_POST["city"]);
+    if (!ctype_alpha($city)) {
+        $cityErr = " Street must be alphabetic!";
+    }
+    if (empty($city)) {
+        $cityErr = "Street is required!";
+    }
+
+    $email = test_input($_POST["email"]);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $emailErr = "Invalid email format";
+    }
+    if (empty($email)) {
+        $emailErr = "Email is required!";
+    }
+}
+
 
 function validate()
 {
     // TODO: This function will send a list of invalid fields back
-    return [];
+
+               // echo "Thank you for your order!" . "<br>" . "Confirmation will be sent to: " . $email . ".<br>" .
+                   // "We will soon ship to your address: " . $street
+                   // . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
+
+    //return [];
+
 }
 
 function handleForm()
 {
     // TODO: form related tasks (step 1)
-    //get contact-details:
-    $street = $_POST["street"];
-    $streetNumber = $_POST["streetnumber"];
-    $zipcode = $_POST["zipcode"];
-    $city = $_POST["city"];
-    echo "Thank you for your order: " . "We will soon ship to your address: " . $street
-        . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
 
+    //echo "Thank you for your order: " . "Confirmation will be sent to: " . $email . "We will soon ship to your address: " . $street
+    //   . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
 
     // Validation (step 2)
-    $invalidFields = validate();
+    //$invalidFields = validate();
     if (!empty($invalidFields)) {
         // TODO: handle errors
-    } else {
-        // TODO: handle successful submission
-    }
+    } //else {
+    // TODO: handle successful submission
+    //}
 }
 
 // TODO: replace this if by an actual check
 if (isset($_POST["submit"])) {
+    validate();
     handleForm();
 }
-
 require 'form-view.php';
