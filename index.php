@@ -10,7 +10,8 @@ declare(strict_types=1);
 session_start();
 
 // Use this function when you need to need an overview of these variables
-function whatIsHappening() {
+function whatIsHappening()
+{
     echo '<h2>$_GET</h2>';
     var_dump($_GET);
     echo '<h2>$_POST</h2>';
@@ -20,6 +21,7 @@ function whatIsHappening() {
     echo '<h2>$_SESSION</h2>';
     var_dump($_SESSION);
 }
+
 //whatIsHappening();
 
 // TODO: provide some products (you may overwrite the example)
@@ -31,6 +33,15 @@ $products = [
     ['name' => 'fish-wax', 'price' => 8.25],
     ['name' => 'fish-fake-pony-tail', 'price' => 21.15]
 ];
+//get products:
+function selected($products)
+{
+    if (isset($_POST['products'])) {
+        foreach ($_POST['products'] as $product) {
+            echo implode(": ", $products[$product]) . "<br>";
+        }
+    }
+}
 
 $totalValue = 0;
 
@@ -43,8 +54,13 @@ function validate()
 function handleForm()
 {
     // TODO: form related tasks (step 1)
-   echo "Thank you for your order: " . "We will soon ship to your address: ". $_POST["street"]
-       . " " . $_POST["streetnumber"] . " in " .  $_POST["zipcode"] . " " . $_POST["city"] . ".";
+    //get contact-details:
+    $street = $_POST["street"];
+    $streetNumber = $_POST["streetnumber"];
+    $zipcode = $_POST["zipcode"];
+    $city = $_POST["city"];
+    echo "Thank you for your order: " . "We will soon ship to your address: " . $street
+        . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
 
 
     // Validation (step 2)
@@ -58,11 +74,8 @@ function handleForm()
 
 // TODO: replace this if by an actual check
 if (isset($_POST["submit"])) {
-handleForm();
-}
-/*$formSubmitted = false;
-if ($formSubmitted) {
     handleForm();
-}*/
+    selected($products);
+}
 
 require 'form-view.php';
