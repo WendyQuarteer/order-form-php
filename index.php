@@ -25,6 +25,7 @@ function whatIsHappening()
 //whatIsHappening();
 
 // TODO: provide some products (you may overwrite the example)
+###Products###
 $products = [
     ['name' => 'Fish-bathtub', 'price' => 45.80],
     ['name' => 'Fish-shampoo', 'price' => 12.50],
@@ -33,7 +34,7 @@ $products = [
     ['name' => 'fish-wax', 'price' => 8.25],
     ['name' => 'fish-fake-pony-tail', 'price' => 21.15]
 ];
-//get selected products:
+
 function selected($products)
 {
     if (isset($_POST['products'])) {
@@ -48,86 +49,70 @@ function selected($products)
         return $totalPrice;
     }
 }
+
 $totalValue = selected($products);
 
-$streetNrErr = ""; $zipcodeErr = ""; $streetErr = ""; $cityErr = ""; $emailErr = "";
-function test_input($data)
+/*function test_input($data)
 {
     $data = trim($data);
     $data = stripslashes($data);
     return htmlspecialchars($data);
-}
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $streetNumber = test_input($_POST["streetnumber"]);
-    if (!is_numeric($streetNumber)) {
-        $streetNrErr = "Streetnumber must be a number!";
-        //var_dump($streetNrErr);
-    }
-    if (empty($streetNumber)) {
-        $streetNrErr = "Streetnumber is required!";
-    }
+}*/
 
-    $zipcode = test_input($_POST["zipcode"]);
-    if (!is_numeric($zipcode)) {
-        $zipcodeErr = "Zipcode must be a number!";
-        //var_dump($zipcode);
-    }
-    if (empty($zipcode)) {
-        $zipcodeErr = "Zipcode is required!";
-    }
+/*echo "Thank you for your order!" . "<br>" . "Confirmation will be sent to: " . $email . ".<br>" .
+    "We will soon ship to your address: " . $street
+    . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";*/
 
-    $street = test_input($_POST["street"]);
-    if (!ctype_alpha($street)) {
-        $streetErr = " Street must be alphabetic!";
-    }
-    if(empty($street)) {
-        $streetErr = "Street is required!";
-    }
-
-    $city = test_input($_POST["city"]);
-    if (!ctype_alpha($city)) {
-        $cityErr = " Street must be alphabetic!";
-    }
-    if (empty($city)) {
-        $cityErr = "Street is required!";
-    }
-
-    $email = test_input($_POST["email"]);
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Invalid email format";
-    }
-    if (empty($email)) {
-        $emailErr = "Email is required!";
-    }
-}
-
-
+###Validation###
 function validate()
 {
+###contact-details###
+    $streetNumber = $_POST["streetnumber"];
+    $zipcode = $_POST["zipcode"];
+    $street = $_POST["street"];
+    $email = $_POST["email"];
+    $city = $_POST["city"];
+
+###Errors###
+    $emailErr = "This field is required! - Valid email format only!";
+    $noAbcErr = "This field is required! - Input must be alphabetic only!";
+    $noNumberErr = "This field is required! - Input must be numbers only!";
+
     // TODO: This function will send a list of invalid fields back
-
-               // echo "Thank you for your order!" . "<br>" . "Confirmation will be sent to: " . $email . ".<br>" .
-                   // "We will soon ship to your address: " . $street
-                   // . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
-
-    //return [];
-
+    $return = [];
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if (!is_numeric($streetNumber) || empty($streetNumber)) {
+            $return["StreetNumber"] = $noNumberErr;
+        }
+        if (!is_numeric($zipcode) || empty($zipcode)) {
+            $return["Zipcode"] = $noNumberErr;
+        }
+        if (!ctype_alpha($street) || empty($street)) {
+            $return["Street"] = $noAbcErr;
+        }
+        if (!ctype_alpha($city) || empty($city)) {
+            $return["City"] = $noAbcErr;
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($email)) {
+            $return["Email"] = $emailErr;
+        }
+    }
+    return $return;
 }
 
 function handleForm()
 {
     // TODO: form related tasks (step 1)
-
-    //echo "Thank you for your order: " . "Confirmation will be sent to: " . $email . "We will soon ship to your address: " . $street
-    //   . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";
-
     // Validation (step 2)
-    //$invalidFields = validate();
-    if (!empty($invalidFields)) {
-        // TODO: handle errors
-    } //else {
+
+    // TODO: handle errors
+    $invalidFields = validate();
+    //var_dump([$invalidFields]);
+    echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $invalidFields . "</div>";
+
+
     // TODO: handle successful submission
-    //}
+
 }
 
 // TODO: replace this if by an actual check
