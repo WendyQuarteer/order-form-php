@@ -107,8 +107,18 @@ function handleForm()
 
     // TODO: handle errors
     $invalidFields = validate();
-    //var_dump([$invalidFields]);
-    echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $invalidFields . "</div>";
+    foreach ($invalidFields as $key => $error) {
+        //var_dump($key, $error);
+        echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $key . ": " . $error  . "</div>";
+
+        //foreach ($error as $key => $value) {
+            //echo $key;
+            //echo $value;
+        //}
+    }
+
+    //var_dump($invalidFields);
+    //echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $invalidFields["StreetNumber"] . "</div>";
 
 
     // TODO: handle successful submission
