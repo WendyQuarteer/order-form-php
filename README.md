@@ -20,8 +20,9 @@ Use PHP to check the following:
 - [x] Required fields are not empty.
 - [x] Zip code are only numbers.
 - [x] Email address is valid.
-- [] Show any problems (empty or invalid data) with the fields at the top of the form. Tip: use the bootstrap alerts for 
-inspiration. If they are valid, the confirmation of step 1 is shown.
+- [X] Show any problems (empty or invalid data) with the fields at the top of the form. Tip: use the bootstrap alerts for 
+inspiration. 
+- [] If they are valid, the confirmation of step 1 is shown.
 - [x] If the form was not valid, show the previous values in the form so that the user doesn't have to retype everything.
 Usually, validation is a combination of server side checks (for security, these can't be bypassed) and checks in 
 html / JS (can be bypassed but can give live user feedback).

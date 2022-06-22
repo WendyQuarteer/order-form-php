@@ -1,8 +1,6 @@
 <?php
-
 // This file is your starting point (= since it's the index)
 // It will contain most of the logic, to prevent making a messy mix in the html
-
 // This line makes PHP behave in a more strict way
 declare(strict_types=1);
 
@@ -38,19 +36,27 @@ $products = [
 function selected($products)
 {
     if (isset($_POST['products'])) {
+        foreach ($_POST['products'] as $key => $product) {
+            var_dump($product);
+            $selection = implode(": ", $products[$key]);
+            echo $selection . "€<br>";
+            return $selection;
+        }
+
+    }
+}
+function total($products)
+{
+    if (isset($_POST['products'])) {
         $totalPrice = 0;
         foreach ($_POST['products'] as $product) {
-            $selection = implode(": ", $products[$product]);
-            echo $selection . "€<br>";
             $price = $products[$product]['price'];
-            $totalPrice += $price;
+            $totalPrice += floatval($price);
         }
-        echo "Total: " . $totalPrice . "€<br>";
         return $totalPrice;
     }
 }
-
-$totalValue = selected($products);
+$totalValue = total($products);
 
 /*function test_input($data)
 {
@@ -59,19 +65,15 @@ $totalValue = selected($products);
     return htmlspecialchars($data);
 }*/
 
-/*echo "Thank you for your order!" . "<br>" . "Confirmation will be sent to: " . $email . ".<br>" .
-    "We will soon ship to your address: " . $street
-    . " " . $streetNumber . " in " . $zipcode . " " . $city . "." . "<br>";*/
-
 ###Validation###
 function validate()
 {
 ###contact-details###
-    $streetNumber = $_POST["streetnumber"];
-    $zipcode = $_POST["zipcode"];
-    $street = $_POST["street"];
-    $email = $_POST["email"];
-    $city = $_POST["city"];
+    $_SESSION["streetNumber"] = $_POST["streetnumber"];
+    $_SESSION["zipcode"] = $_POST["zipcode"];
+    $_SESSION["street"] = $_POST["street"];
+    $_SESSION["email"] = $_POST["email"];
+    $_SESSION["city"] = $_POST["city"];
 
 ###Errors###
     $emailErr = "This field is required! - Valid email format only!";
@@ -81,53 +83,49 @@ function validate()
     // TODO: This function will send a list of invalid fields back
     $return = [];
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if (!is_numeric($streetNumber) || empty($streetNumber)) {
+        if (!is_numeric($_SESSION["streetNumber"]) || empty($_SESSION["streetNumber"])) {
             $return["StreetNumber"] = $noNumberErr;
         }
-        if (!is_numeric($zipcode) || empty($zipcode)) {
+        if (!is_numeric($_SESSION["zipcode"]) || empty($_SESSION["zipcode"])) {
             $return["Zipcode"] = $noNumberErr;
         }
-        if (!ctype_alpha($street) || empty($street)) {
+        if (!ctype_alpha($_SESSION["street"]) || empty($_SESSION["street"])) {
             $return["Street"] = $noAbcErr;
         }
-        if (!ctype_alpha($city) || empty($city)) {
+        if (!ctype_alpha($_SESSION["city"]) || empty($_SESSION["city"])) {
             $return["City"] = $noAbcErr;
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($email)) {
+        if (!filter_var($_SESSION["email"], FILTER_VALIDATE_EMAIL) || empty($_SESSION["email"])) {
             $return["Email"] = $emailErr;
         }
     }
     return $return;
 }
 
-function handleForm()
+function handleForm($products)
 {
     // TODO: form related tasks (step 1)
     // Validation (step 2)
+    global $products;
 
     // TODO: handle errors
     $invalidFields = validate();
-    foreach ($invalidFields as $key => $error) {
-        //var_dump($key, $error);
-        echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $key . ": " . $error  . "</div>";
-
-        //foreach ($error as $key => $value) {
-            //echo $key;
-            //echo $value;
-        //}
+    if ($invalidFields) {
+        foreach ($invalidFields as $key => $error) {
+            echo "<div class='alert alert-warning'>" . "<strong>Warning: </strong>" . "<br>" . $key . ": " . $error . "</div>";
+        }
+    } // TODO: handle successful submission
+    else {
+        echo "<div class='alert alert-success alert-dismissible'>" . "<a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" . "<strong>Thank you for your order!</strong>"
+            . "<br>" . "Confirmation will be sent to: " . $_SESSION["email"] . ".<br>" .
+            "We will soon ship to your address: " . $_SESSION["street"] . " " . $_SESSION["streetNumber"]
+            . " in " . $_SESSION["zipcode"] . " " . $_SESSION["city"] . "." . "<br>" . selected($products) . total($products) . "</div>";
     }
-
-    //var_dump($invalidFields);
-    //echo "<div class='alert alert-warning'>" . "Warning: " . "<br>" . $invalidFields["StreetNumber"] . "</div>";
-
-
-    // TODO: handle successful submission
-
 }
 
 // TODO: replace this if by an actual check
 if (isset($_POST["submit"])) {
     validate();
-    handleForm();
+    handleForm($products);
 }
 require 'form-view.php';
